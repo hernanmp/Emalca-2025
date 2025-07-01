@@ -10,14 +10,14 @@ beta <- c(rep(3, 5), rep(0, p - 5))  # sparse true coefficients
 y <- X %*% beta + rnorm(n)
 
 # Fit Lasso regression (alpha=1 for Lasso)
-lasso_fit <- glmnet(X, y, alpha = 1)
+lasso_fit <- glmnet(X, y, alpha = 1,intercept = FALSE)
 
 # Plot solution paths
 plot(lasso_fit, xvar = "lambda", label = TRUE)
 title("Lasso Coefficient Paths")
 
 # Cross-validation to select best lambda
-cv_fit <- cv.glmnet(X, y, alpha = 1)
+cv_fit <- cv.glmnet(X, y, alpha = 1,intercept = FALSE)
 plot(cv_fit)
 title("Cross-Validation Error")
 
@@ -29,4 +29,6 @@ cat("Best lambda:", best_lambda, "\n")
 beta_hat = coef(cv_fit, s = "lambda.min")
 plot(beta_hat)
 plot(beta_hat[1:50])
+
+sum((beta_hat[-1]-beta)^2)
 
